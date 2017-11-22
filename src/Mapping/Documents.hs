@@ -1,20 +1,14 @@
-{-# LANGUAGE Arrows #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Mapping.Documents where
-import Opaleye
-import Data.Profunctor.Product (p2, p3)
+import Database.PostgreSQL.Simple
+import Data.UUID
 
-personTable :: Table (Column PGText, Column PGInt4, Column PGText)
-                     (Column PGText, Column PGInt4, Column PGText)
-personTable = table "personTable" (p3 ( tableColumn "name"
-                                     , tableColumn "age"
-                                     , tableColumn "address" ))
---
---
--- Opaleye.PG
+t :: String
+t = "NFE"
 
--- someFunc = 10
+hello :: IO (UUID, String)
+hello = do
+  conn <- connectPostgreSQL "user=postgres dbname=organizer"
+  [(i, str)] <- query conn "SELECT id, description FROM documents WHERE type = ?" (Only t)
+  return (i, str)
