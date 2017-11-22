@@ -3,12 +3,23 @@
 module Mapping.Documents where
 import Database.PostgreSQL.Simple
 import Data.UUID
+import Data.Vector (Vector)
+
+data Document = Document { id :: UUID
+                         , description :: String
+                         , products :: Vector String
+                         , storage :: Maybe String
+                         , documentType :: Maybe String
+                         , driveLink :: Maybe String } deriving Show
 
 t :: String
-t = "NFE"
+t = "NF"
 
-hello :: IO (UUID, String)
-hello = do
+getAll :: IO [Document]
+getAll = do
   conn <- connectPostgreSQL "user=postgres dbname=organizer"
-  [(i, str)] <- query conn "SELECT id, description FROM documents WHERE type = ?" (Only t)
-  return (i, str)
+  elements <- query_ conn "SELECT id, description, products, storage, type, drive_link FROM documents"
+  return $ map fromTuple elements
+
+fromTuple (i, description, products, storage, documentType, driveLink) =
+  Document i description products storage documentType driveLink

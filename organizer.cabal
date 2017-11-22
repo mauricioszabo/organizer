@@ -34,6 +34,7 @@ library
       base >=4.7 && <5
     , uuid == 1.3.13
     , postgresql-simple == 0.5.3.0
+    , vector == 0.12.0.1
   default-language: Haskell2010
 
 executable organizer-exe
