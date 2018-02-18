@@ -1,4 +1,5 @@
 (ns organizer.controllers.documents)
 
 (defn hello [conn params]
-  "Foo")
+  {:status 201
+   :body {:foo "BAR"}})
